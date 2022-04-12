@@ -1,0 +1,401 @@
+{
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "# Named Entity Recognition (NER)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "#TODO: Table of contents. Общее описание задачи"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Using the model from Python"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "First make sure you have the DeepPavlov library installed\n",
+    "\\#TODO: link to istallation page"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 2,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Requirement already satisfied: deeppavlov in c:\\users\\анастасия\\appdata\\roaming\\python\\python37\\site-packages (0.14.0)\n",
+      "Requirement already satisfied: sacremoses==0.0.35 in c:\\anaconda\\lib\\site-packages (from deeppavlov) (0.0.35)\n"
+     ]
+    },
+    {
+     "name": "stderr",
+     "output_type": "stream",
+     "text": [
+      "WARNING: Ignoring invalid distribution -umpy (c:\\anaconda\\lib\\site-packages)\n",
+      "WARNING: Ignoring invalid distribution -umexpr (c:\\anaconda\\lib\\site-packages)\n",
+      "WARNING: Ignoring invalid distribution -cipy (c:\\anaconda\\lib\\site-packages)\n",
+      "WARNING: Ignoring invalid distribution -umpy (c:\\anaconda\\lib\\site-packages)\n",
+      "WARNING: Ignoring invalid distribution -umexpr (c:\\anaconda\\lib\\site-packages)\n",
+      "WARNING: Ignoring invalid distribution -cipy (c:\\anaconda\\lib\\site-packages)\n",
+      "WARNING: Ignoring invalid distribution -umpy (c:\\anaconda\\lib\\site-packages)\n",
+      "WARNING: Ignoring invalid distribution -umexpr (c:\\anaconda\\lib\\site-packages)\n",
+      "WARNING: Ignoring invalid distribution -cipy (c:\\anaconda\\lib\\site-packages)\n",
+      "ERROR: Could not install packages due to an OSError: [WinError 5] Отказано в доступе: 'C:\\\\Users\\\\Анастасия\\\\AppData\\\\Roaming\\\\Python\\\\Python37\\\\site-packages\\\\_ruamel_yaml.cp37-win_amd64.pyd'\n",
+      "Check the permissions.\n",
+      "\n",
+      "WARNING: Ignoring invalid distribution -umpy (c:\\anaconda\\lib\\site-packages)\n",
+      "WARNING: Ignoring invalid distribution -umexpr (c:\\anaconda\\lib\\site-packages)\n",
+      "WARNING: Ignoring invalid distribution -cipy (c:\\anaconda\\lib\\site-packages)\n",
+      "WARNING: Ignoring invalid distribution -umpy (c:\\anaconda\\lib\\site-packages)\n",
+      "WARNING: Ignoring invalid distribution -umexpr (c:\\anaconda\\lib\\site-packages)\n",
+      "WARNING: Ignoring invalid distribution -cipy (c:\\anaconda\\lib\\site-packages)\n",
+      "WARNING: Ignoring invalid distribution -umpy (c:\\anaconda\\lib\\site-packages)\n",
+      "WARNING: Ignoring invalid distribution -umexpr (c:\\anaconda\\lib\\site-packages)\n",
+      "WARNING: Ignoring invalid distribution -cipy (c:\\anaconda\\lib\\site-packages)\n",
+      "WARNING: You are using pip version 21.3; however, version 22.0.4 is available.\n",
+      "You should consider upgrading via the 'c:\\anaconda\\python.exe -m pip install --upgrade pip' command.\n"
+     ]
+    },
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Requirement already satisfied: requests==2.22.0 in c:\\anaconda\\lib\\site-packages (from deeppavlov) (2.22.0)\n",
+      "Requirement already satisfied: Cython==0.29.14 in c:\\users\\анастасия\\appdata\\roaming\\python\\python37\\site-packages (from deeppavlov) (0.29.14)\n",
+      "Requirement already satisfied: prometheus-client==0.7.1 in c:\\anaconda\\lib\\site-packages (from deeppavlov) (0.7.1)\n",
+      "Requirement already satisfied: pymorphy2==0.8 in c:\\anaconda\\lib\\site-packages (from deeppavlov) (0.8)\n",
+      "Requirement already satisfied: pytelegrambotapi==3.6.7 in c:\\users\\анастасия\\appdata\\roaming\\python\\python37\\site-packages (from deeppavlov) (3.6.7)\n",
+      "Requirement already satisfied: filelock==3.0.12 in c:\\anaconda\\lib\\site-packages (from deeppavlov) (3.0.12)\n",
+      "Requirement already satisfied: aio-pika==6.4.1 in c:\\users\\анастасия\\appdata\\roaming\\python\\python37\\site-packages (from deeppavlov) (6.4.1)\n",
+      "Requirement already satisfied: pandas==0.25.3 in c:\\users\\анастасия\\appdata\\roaming\\python\\python37\\site-packages (from deeppavlov) (0.25.3)\n",
+      "Requirement already satisfied: pyopenssl==19.1.0 in c:\\users\\анастасия\\appdata\\roaming\\python\\python37\\site-packages (from deeppavlov) (19.1.0)\n",
+      "Requirement already satisfied: h5py==2.10.0 in c:\\users\\анастасия\\appdata\\roaming\\python\\python37\\site-packages (from deeppavlov) (2.10.0)\n",
+      "Requirement already satisfied: scipy==1.4.1 in c:\\anaconda\\lib\\site-packages (from deeppavlov) (1.4.1)\n",
+      "Requirement already satisfied: pytz==2019.1 in c:\\anaconda\\lib\\site-packages (from deeppavlov) (2019.1)\n",
+      "Requirement already satisfied: uvicorn==0.11.7 in c:\\anaconda\\lib\\site-packages (from deeppavlov) (0.11.7)\n",
+      "Collecting ruamel.yaml==0.15.100\n",
+      "  Using cached ruamel.yaml-0.15.100-cp37-cp37m-win_amd64.whl (225 kB)\n",
+      "Requirement already satisfied: nltk==3.4.5 in c:\\users\\анастасия\\appdata\\roaming\\python\\python37\\site-packages (from deeppavlov) (3.4.5)\n",
+      "Requirement already satisfied: numpy==1.18.0 in c:\\anaconda\\lib\\site-packages (from deeppavlov) (1.18.0)\n",
+      "Requirement already satisfied: rusenttokenize==0.0.5 in c:\\anaconda\\lib\\site-packages (from deeppavlov) (0.0.5)\n",
+      "Requirement already satisfied: tqdm==4.41.1 in c:\\anaconda\\lib\\site-packages (from deeppavlov) (4.41.1)\n",
+      "Requirement already satisfied: pymorphy2-dicts-ru in c:\\users\\анастасия\\appdata\\roaming\\python\\python37\\site-packages (from deeppavlov) (2.4.417127.4579844)\n",
+      "Requirement already satisfied: click==7.1.2 in c:\\anaconda\\lib\\site-packages (from deeppavlov) (7.1.2)\n",
+      "Requirement already satisfied: scikit-learn==0.21.2 in c:\\anaconda\\lib\\site-packages (from deeppavlov) (0.21.2)\n",
+      "Requirement already satisfied: pydantic==1.3 in c:\\anaconda\\lib\\site-packages (from deeppavlov) (1.3)\n",
+      "Requirement already satisfied: overrides==2.7.0 in c:\\users\\анастасия\\appdata\\roaming\\python\\python37\\site-packages (from deeppavlov) (2.7.0)\n",
+      "Requirement already satisfied: fastapi==0.47.1 in c:\\users\\анастасия\\appdata\\roaming\\python\\python37\\site-packages (from deeppavlov) (0.47.1)\n",
+      "Requirement already satisfied: aiormq<4,>=3.2.0 in c:\\anaconda\\lib\\site-packages (from aio-pika==6.4.1->deeppavlov) (3.3.1)\n",
+      "Requirement already satisfied: yarl in c:\\anaconda\\lib\\site-packages (from aio-pika==6.4.1->deeppavlov) (1.7.2)\n",
+      "Requirement already satisfied: starlette<=0.12.9,>=0.12.9 in c:\\anaconda\\lib\\site-packages (from fastapi==0.47.1->deeppavlov) (0.12.9)\n",
+      "Requirement already satisfied: six in c:\\anaconda\\lib\\site-packages (from h5py==2.10.0->deeppavlov) (1.15.0)\n",
+      "Requirement already satisfied: python-dateutil>=2.6.1 in c:\\anaconda\\lib\\site-packages (from pandas==0.25.3->deeppavlov) (2.8.0)\n",
+      "Requirement already satisfied: dawg-python>=0.7 in c:\\anaconda\\lib\\site-packages (from pymorphy2==0.8->deeppavlov) (0.7.2)\n",
+      "Requirement already satisfied: docopt>=0.6 in c:\\anaconda\\lib\\site-packages (from pymorphy2==0.8->deeppavlov) (0.6.2)\n",
+      "Requirement already satisfied: pymorphy2-dicts<3.0,>=2.4 in c:\\anaconda\\lib\\site-packages (from pymorphy2==0.8->deeppavlov) (2.4.393442.3710985)\n",
+      "Requirement already satisfied: cryptography>=2.8 in c:\\anaconda\\lib\\site-packages (from pyopenssl==19.1.0->deeppavlov) (36.0.2)\n",
+      "Requirement already satisfied: urllib3!=1.25.0,!=1.25.1,<1.26,>=1.21.1 in c:\\anaconda\\lib\\site-packages (from requests==2.22.0->deeppavlov) (1.25.11)\n",
+      "Requirement already satisfied: certifi>=2017.4.17 in c:\\anaconda\\lib\\site-packages (from requests==2.22.0->deeppavlov) (2019.6.16)\n",
+      "Requirement already satisfied: chardet<3.1.0,>=3.0.2 in c:\\anaconda\\lib\\site-packages (from requests==2.22.0->deeppavlov) (3.0.4)\n",
+      "Requirement already satisfied: idna<2.9,>=2.5 in c:\\anaconda\\lib\\site-packages (from requests==2.22.0->deeppavlov) (2.8)\n",
+      "Requirement already satisfied: joblib in c:\\anaconda\\lib\\site-packages (from sacremoses==0.0.35->deeppavlov) (0.13.2)\n",
+      "Requirement already satisfied: websockets==8.* in c:\\anaconda\\lib\\site-packages (from uvicorn==0.11.7->deeppavlov) (8.1)\n",
+      "Requirement already satisfied: h11<0.10,>=0.8 in c:\\anaconda\\lib\\site-packages (from uvicorn==0.11.7->deeppavlov) (0.9.0)\n",
+      "Requirement already satisfied: pamqp==2.3.0 in c:\\anaconda\\lib\\site-packages (from aiormq<4,>=3.2.0->aio-pika==6.4.1->deeppavlov) (2.3.0)\n",
+      "Requirement already satisfied: cffi>=1.12 in c:\\anaconda\\lib\\site-packages (from cryptography>=2.8->pyopenssl==19.1.0->deeppavlov) (1.15.0)\n",
+      "Requirement already satisfied: multidict>=4.0 in c:\\anaconda\\lib\\site-packages (from yarl->aio-pika==6.4.1->deeppavlov) (5.2.0)\n",
+      "Requirement already satisfied: typing-extensions>=3.7.4 in c:\\anaconda\\lib\\site-packages (from yarl->aio-pika==6.4.1->deeppavlov) (3.10.0.0)\n",
+      "Requirement already satisfied: pycparser in c:\\anaconda\\lib\\site-packages (from cffi>=1.12->cryptography>=2.8->pyopenssl==19.1.0->deeppavlov) (2.19)\n",
+      "Installing collected packages: ruamel.yaml\n"
+     ]
+    }
+   ],
+   "source": [
+    "!pip install deeppavlov --user"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### Use the pre-trained model for prediction"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 10,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# TODO: add output"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Before using the model make sure that all required packages are installed using the command:"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 1,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stderr",
+     "output_type": "stream",
+     "text": [
+      "C:\\anaconda\\python.exe: No module named deeppavlov\n"
+     ]
+    }
+   ],
+   "source": [
+    "!python -m deeppavlov install ner_ontonotes_bert_torch"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Build the model using its *config_file* name (in this case - *ner_ontonotes_bert_torch*). \n",
+    "\n",
+    "What is a config file? # link to the tutorial\n",
+    "\n",
+    "You can change the NER model you are using by changing the name of the *config_file*.\n",
+    "The full list of NER models with their config names can be found **here**."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 6,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from deeppavlov import configs, build_model\n",
+    "\n",
+    "ner_model = build_model(configs.ner.ner_ontonotes_bert_torch, download=True)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Predict\n",
+    "\n",
+    "\\# TODO:\n",
+    "**input_format**: List[str]\n",
+    "**output_format**: List[List[str]]"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "ner_model(['Bob Ross lived in Florida'])"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### Train the model on your data"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "#### Provide your data path"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "To train the model on your data, you need to change the path to the training data in the *config_file*. "
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "?You can do that manually by editing the config json-file.?\n",
+    "Alternatively, you can parse the *config_file* and change the path to your data from Python."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from deeppavlov import configs, train_model\n",
+    "from deeppavlov.core.commands.utils import parse_config\n",
+    "\n",
+    "model_config = parse_config(configs.ner.ner_ontonotes_bert_torch)\n",
+    "\n",
+    "#  dataset that the model was trained on\n",
+    "print(model_config['dataset_reader']['data_path'])"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "You can provide a *data_path* to your dataset..."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "model_config[\"dataset_reader\"][\"data_path\"] = \"/content/faq.csv\"\n",
+    "model_config[\"dataset_reader\"][\"data_url\"] = None"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "...or give a link to your data in the *data_url* parameter."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 9,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "model_config[\"dataset_reader\"][\"data_path\"] = ''\n",
+    "model_config[\"dataset_reader\"][\"data_url\"] = \"http://files.deeppavlov.ai/faq/school/faq_school_en.csv\""
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "#### Training dataset format"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "To train the neural network, you need to have a dataset in the following format:"
+   ]
+  },
+  {
+   "cell_type": "raw",
+   "metadata": {},
+   "source": [
+    "EU B-ORG\n",
+    "rejects O\n",
+    "the O\n",
+    "call O\n",
+    "of O\n",
+    "Germany B-LOC\n",
+    "to O\n",
+    "boycott O\n",
+    "lamb O\n",
+    "from O\n",
+    "Great B-LOC\n",
+    "Britain I-LOC\n",
+    ". O\n",
+    "\n",
+    "China B-LOC\n",
+    "says O\n",
+    "time O\n",
+    "right O\n",
+    "for O\n",
+    "Taiwan B-LOC\n",
+    "talks O\n",
+    ". O\n"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "The source text is **tokenized** and **tagged**. For each token, there is a tag with BIO markup. Tags are separated from tokens with **whitespaces**. Sentences are separated with **empty lines**."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "??? - Dataset is a text file or a set of text files. The dataset must be split into three parts: train, test, and validation."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "#### Train the model"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "ner_model = train_model(model_config)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Using the model from the command line"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python (doc_env)",
+   "language": "python",
+   "name": "doc_env"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.7.3"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 4
+}

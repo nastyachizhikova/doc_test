@@ -1,0 +1,599 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Named Entity Recognition (NER) &#8212; new_dp_docs 0.0.0 documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "tex2jax_ignore|mathjax_ignore|document", "processClass": "tex2jax_process|mathjax_process|math|output_area"}})</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  
+<style>
+/* CSS for nbsphinx extension */
+
+/* remove conflicting styling from Sphinx themes */
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt *,
+div.nbinput.container div.input_area pre,
+div.nboutput.container div.output_area pre,
+div.nbinput.container div.input_area .highlight,
+div.nboutput.container div.output_area .highlight {
+    border: none;
+    padding: 0;
+    margin: 0;
+    box-shadow: none;
+}
+
+div.nbinput.container > div[class*=highlight],
+div.nboutput.container > div[class*=highlight] {
+    margin: 0;
+}
+
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt * {
+    background: none;
+}
+
+div.nboutput.container div.output_area .highlight,
+div.nboutput.container div.output_area pre {
+    background: unset;
+}
+
+div.nboutput.container div.output_area div.highlight {
+    color: unset;  /* override Pygments text color */
+}
+
+/* avoid gaps between output lines */
+div.nboutput.container div[class*=highlight] pre {
+    line-height: normal;
+}
+
+/* input/output containers */
+div.nbinput.container,
+div.nboutput.container {
+    display: -webkit-flex;
+    display: flex;
+    align-items: flex-start;
+    margin: 0;
+    width: 100%;
+}
+@media (max-width: 540px) {
+    div.nbinput.container,
+    div.nboutput.container {
+        flex-direction: column;
+    }
+}
+
+/* input container */
+div.nbinput.container {
+    padding-top: 5px;
+}
+
+/* last container */
+div.nblast.container {
+    padding-bottom: 5px;
+}
+
+/* input prompt */
+div.nbinput.container div.prompt pre {
+    color: #307FC1;
+}
+
+/* output prompt */
+div.nboutput.container div.prompt pre {
+    color: #BF5B3D;
+}
+
+/* all prompts */
+div.nbinput.container div.prompt,
+div.nboutput.container div.prompt {
+    width: 4.5ex;
+    padding-top: 5px;
+    position: relative;
+    user-select: none;
+}
+
+div.nbinput.container div.prompt > div,
+div.nboutput.container div.prompt > div {
+    position: absolute;
+    right: 0;
+    margin-right: 0.3ex;
+}
+
+@media (max-width: 540px) {
+    div.nbinput.container div.prompt,
+    div.nboutput.container div.prompt {
+        width: unset;
+        text-align: left;
+        padding: 0.4em;
+    }
+    div.nboutput.container div.prompt.empty {
+        padding: 0;
+    }
+
+    div.nbinput.container div.prompt > div,
+    div.nboutput.container div.prompt > div {
+        position: unset;
+    }
+}
+
+/* disable scrollbars on prompts */
+div.nbinput.container div.prompt pre,
+div.nboutput.container div.prompt pre {
+    overflow: hidden;
+}
+
+/* input/output area */
+div.nbinput.container div.input_area,
+div.nboutput.container div.output_area {
+    -webkit-flex: 1;
+    flex: 1;
+    overflow: auto;
+}
+@media (max-width: 540px) {
+    div.nbinput.container div.input_area,
+    div.nboutput.container div.output_area {
+        width: 100%;
+    }
+}
+
+/* input area */
+div.nbinput.container div.input_area {
+    border: 1px solid #e0e0e0;
+    border-radius: 2px;
+    /*background: #f5f5f5;*/
+}
+
+/* override MathJax center alignment in output cells */
+div.nboutput.container div[class*=MathJax] {
+    text-align: left !important;
+}
+
+/* override sphinx.ext.imgmath center alignment in output cells */
+div.nboutput.container div.math p {
+    text-align: left;
+}
+
+/* standard error */
+div.nboutput.container div.output_area.stderr {
+    background: #fdd;
+}
+
+/* ANSI colors */
+.ansi-black-fg { color: #3E424D; }
+.ansi-black-bg { background-color: #3E424D; }
+.ansi-black-intense-fg { color: #282C36; }
+.ansi-black-intense-bg { background-color: #282C36; }
+.ansi-red-fg { color: #E75C58; }
+.ansi-red-bg { background-color: #E75C58; }
+.ansi-red-intense-fg { color: #B22B31; }
+.ansi-red-intense-bg { background-color: #B22B31; }
+.ansi-green-fg { color: #00A250; }
+.ansi-green-bg { background-color: #00A250; }
+.ansi-green-intense-fg { color: #007427; }
+.ansi-green-intense-bg { background-color: #007427; }
+.ansi-yellow-fg { color: #DDB62B; }
+.ansi-yellow-bg { background-color: #DDB62B; }
+.ansi-yellow-intense-fg { color: #B27D12; }
+.ansi-yellow-intense-bg { background-color: #B27D12; }
+.ansi-blue-fg { color: #208FFB; }
+.ansi-blue-bg { background-color: #208FFB; }
+.ansi-blue-intense-fg { color: #0065CA; }
+.ansi-blue-intense-bg { background-color: #0065CA; }
+.ansi-magenta-fg { color: #D160C4; }
+.ansi-magenta-bg { background-color: #D160C4; }
+.ansi-magenta-intense-fg { color: #A03196; }
+.ansi-magenta-intense-bg { background-color: #A03196; }
+.ansi-cyan-fg { color: #60C6C8; }
+.ansi-cyan-bg { background-color: #60C6C8; }
+.ansi-cyan-intense-fg { color: #258F8F; }
+.ansi-cyan-intense-bg { background-color: #258F8F; }
+.ansi-white-fg { color: #C5C1B4; }
+.ansi-white-bg { background-color: #C5C1B4; }
+.ansi-white-intense-fg { color: #A1A6B2; }
+.ansi-white-intense-bg { background-color: #A1A6B2; }
+
+.ansi-default-inverse-fg { color: #FFFFFF; }
+.ansi-default-inverse-bg { background-color: #000000; }
+
+.ansi-bold { font-weight: bold; }
+.ansi-underline { text-decoration: underline; }
+
+
+div.nbinput.container div.input_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight].math,
+div.nboutput.container div.output_area.rendered_html,
+div.nboutput.container div.output_area > div.output_javascript,
+div.nboutput.container div.output_area:not(.rendered_html) > img{
+    padding: 5px;
+    margin: 0;
+}
+
+/* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
+div.nbinput.container div.input_area > div[class^='highlight'],
+div.nboutput.container div.output_area > div[class^='highlight']{
+    overflow-y: hidden;
+}
+
+/* hide copybtn icon on prompts (needed for 'sphinx_copybutton') */
+.prompt .copybtn {
+    display: none;
+}
+
+/* Some additional styling taken form the Jupyter notebook CSS */
+div.rendered_html table {
+  border: none;
+  border-collapse: collapse;
+  border-spacing: 0;
+  color: black;
+  font-size: 12px;
+  table-layout: fixed;
+}
+div.rendered_html thead {
+  border-bottom: 1px solid black;
+  vertical-align: bottom;
+}
+div.rendered_html tr,
+div.rendered_html th,
+div.rendered_html td {
+  text-align: right;
+  vertical-align: middle;
+  padding: 0.5em 0.5em;
+  line-height: normal;
+  white-space: normal;
+  max-width: none;
+  border: none;
+}
+div.rendered_html th {
+  font-weight: bold;
+}
+div.rendered_html tbody tr:nth-child(odd) {
+  background: #f5f5f5;
+}
+div.rendered_html tbody tr:hover {
+  background: rgba(66, 165, 245, 0.2);
+}
+</style>
+<div class="section" id="Named-Entity-Recognition-(NER)">
+<h1>Named Entity Recognition (NER)<a class="headerlink" href="#Named-Entity-Recognition-(NER)" title="Permalink to this headline">¶</a></h1>
+<p>#TODO: Table of contents. Общее описание задачи</p>
+<div class="section" id="Using-the-model-from-Python">
+<h2>Using the model from Python<a class="headerlink" href="#Using-the-model-from-Python" title="Permalink to this headline">¶</a></h2>
+<p>First make sure you have the DeepPavlov library installed #TODO: link to istallation page</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span>pip install deeppavlov --user
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Requirement already satisfied: deeppavlov in c:\users\анастасия\appdata\roaming\python\python37\site-packages (0.14.0)
+Requirement already satisfied: sacremoses==0.0.35 in c:\anaconda\lib\site-packages (from deeppavlov) (0.0.35)
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+WARNING: Ignoring invalid distribution -umpy (c:\anaconda\lib\site-packages)
+WARNING: Ignoring invalid distribution -umexpr (c:\anaconda\lib\site-packages)
+WARNING: Ignoring invalid distribution -cipy (c:\anaconda\lib\site-packages)
+WARNING: Ignoring invalid distribution -umpy (c:\anaconda\lib\site-packages)
+WARNING: Ignoring invalid distribution -umexpr (c:\anaconda\lib\site-packages)
+WARNING: Ignoring invalid distribution -cipy (c:\anaconda\lib\site-packages)
+WARNING: Ignoring invalid distribution -umpy (c:\anaconda\lib\site-packages)
+WARNING: Ignoring invalid distribution -umexpr (c:\anaconda\lib\site-packages)
+WARNING: Ignoring invalid distribution -cipy (c:\anaconda\lib\site-packages)
+ERROR: Could not install packages due to an OSError: [WinError 5] Отказано в доступе: &#39;C:\\Users\\Анастасия\\AppData\\Roaming\\Python\\Python37\\site-packages\\_ruamel_yaml.cp37-win_amd64.pyd&#39;
+Check the permissions.
+
+WARNING: Ignoring invalid distribution -umpy (c:\anaconda\lib\site-packages)
+WARNING: Ignoring invalid distribution -umexpr (c:\anaconda\lib\site-packages)
+WARNING: Ignoring invalid distribution -cipy (c:\anaconda\lib\site-packages)
+WARNING: Ignoring invalid distribution -umpy (c:\anaconda\lib\site-packages)
+WARNING: Ignoring invalid distribution -umexpr (c:\anaconda\lib\site-packages)
+WARNING: Ignoring invalid distribution -cipy (c:\anaconda\lib\site-packages)
+WARNING: Ignoring invalid distribution -umpy (c:\anaconda\lib\site-packages)
+WARNING: Ignoring invalid distribution -umexpr (c:\anaconda\lib\site-packages)
+WARNING: Ignoring invalid distribution -cipy (c:\anaconda\lib\site-packages)
+WARNING: You are using pip version 21.3; however, version 22.0.4 is available.
+You should consider upgrading via the &#39;c:\anaconda\python.exe -m pip install --upgrade pip&#39; command.
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Requirement already satisfied: requests==2.22.0 in c:\anaconda\lib\site-packages (from deeppavlov) (2.22.0)
+Requirement already satisfied: Cython==0.29.14 in c:\users\анастасия\appdata\roaming\python\python37\site-packages (from deeppavlov) (0.29.14)
+Requirement already satisfied: prometheus-client==0.7.1 in c:\anaconda\lib\site-packages (from deeppavlov) (0.7.1)
+Requirement already satisfied: pymorphy2==0.8 in c:\anaconda\lib\site-packages (from deeppavlov) (0.8)
+Requirement already satisfied: pytelegrambotapi==3.6.7 in c:\users\анастасия\appdata\roaming\python\python37\site-packages (from deeppavlov) (3.6.7)
+Requirement already satisfied: filelock==3.0.12 in c:\anaconda\lib\site-packages (from deeppavlov) (3.0.12)
+Requirement already satisfied: aio-pika==6.4.1 in c:\users\анастасия\appdata\roaming\python\python37\site-packages (from deeppavlov) (6.4.1)
+Requirement already satisfied: pandas==0.25.3 in c:\users\анастасия\appdata\roaming\python\python37\site-packages (from deeppavlov) (0.25.3)
+Requirement already satisfied: pyopenssl==19.1.0 in c:\users\анастасия\appdata\roaming\python\python37\site-packages (from deeppavlov) (19.1.0)
+Requirement already satisfied: h5py==2.10.0 in c:\users\анастасия\appdata\roaming\python\python37\site-packages (from deeppavlov) (2.10.0)
+Requirement already satisfied: scipy==1.4.1 in c:\anaconda\lib\site-packages (from deeppavlov) (1.4.1)
+Requirement already satisfied: pytz==2019.1 in c:\anaconda\lib\site-packages (from deeppavlov) (2019.1)
+Requirement already satisfied: uvicorn==0.11.7 in c:\anaconda\lib\site-packages (from deeppavlov) (0.11.7)
+Collecting ruamel.yaml==0.15.100
+  Using cached ruamel.yaml-0.15.100-cp37-cp37m-win_amd64.whl (225 kB)
+Requirement already satisfied: nltk==3.4.5 in c:\users\анастасия\appdata\roaming\python\python37\site-packages (from deeppavlov) (3.4.5)
+Requirement already satisfied: numpy==1.18.0 in c:\anaconda\lib\site-packages (from deeppavlov) (1.18.0)
+Requirement already satisfied: rusenttokenize==0.0.5 in c:\anaconda\lib\site-packages (from deeppavlov) (0.0.5)
+Requirement already satisfied: tqdm==4.41.1 in c:\anaconda\lib\site-packages (from deeppavlov) (4.41.1)
+Requirement already satisfied: pymorphy2-dicts-ru in c:\users\анастасия\appdata\roaming\python\python37\site-packages (from deeppavlov) (2.4.417127.4579844)
+Requirement already satisfied: click==7.1.2 in c:\anaconda\lib\site-packages (from deeppavlov) (7.1.2)
+Requirement already satisfied: scikit-learn==0.21.2 in c:\anaconda\lib\site-packages (from deeppavlov) (0.21.2)
+Requirement already satisfied: pydantic==1.3 in c:\anaconda\lib\site-packages (from deeppavlov) (1.3)
+Requirement already satisfied: overrides==2.7.0 in c:\users\анастасия\appdata\roaming\python\python37\site-packages (from deeppavlov) (2.7.0)
+Requirement already satisfied: fastapi==0.47.1 in c:\users\анастасия\appdata\roaming\python\python37\site-packages (from deeppavlov) (0.47.1)
+Requirement already satisfied: aiormq&lt;4,&gt;=3.2.0 in c:\anaconda\lib\site-packages (from aio-pika==6.4.1-&gt;deeppavlov) (3.3.1)
+Requirement already satisfied: yarl in c:\anaconda\lib\site-packages (from aio-pika==6.4.1-&gt;deeppavlov) (1.7.2)
+Requirement already satisfied: starlette&lt;=0.12.9,&gt;=0.12.9 in c:\anaconda\lib\site-packages (from fastapi==0.47.1-&gt;deeppavlov) (0.12.9)
+Requirement already satisfied: six in c:\anaconda\lib\site-packages (from h5py==2.10.0-&gt;deeppavlov) (1.15.0)
+Requirement already satisfied: python-dateutil&gt;=2.6.1 in c:\anaconda\lib\site-packages (from pandas==0.25.3-&gt;deeppavlov) (2.8.0)
+Requirement already satisfied: dawg-python&gt;=0.7 in c:\anaconda\lib\site-packages (from pymorphy2==0.8-&gt;deeppavlov) (0.7.2)
+Requirement already satisfied: docopt&gt;=0.6 in c:\anaconda\lib\site-packages (from pymorphy2==0.8-&gt;deeppavlov) (0.6.2)
+Requirement already satisfied: pymorphy2-dicts&lt;3.0,&gt;=2.4 in c:\anaconda\lib\site-packages (from pymorphy2==0.8-&gt;deeppavlov) (2.4.393442.3710985)
+Requirement already satisfied: cryptography&gt;=2.8 in c:\anaconda\lib\site-packages (from pyopenssl==19.1.0-&gt;deeppavlov) (36.0.2)
+Requirement already satisfied: urllib3!=1.25.0,!=1.25.1,&lt;1.26,&gt;=1.21.1 in c:\anaconda\lib\site-packages (from requests==2.22.0-&gt;deeppavlov) (1.25.11)
+Requirement already satisfied: certifi&gt;=2017.4.17 in c:\anaconda\lib\site-packages (from requests==2.22.0-&gt;deeppavlov) (2019.6.16)
+Requirement already satisfied: chardet&lt;3.1.0,&gt;=3.0.2 in c:\anaconda\lib\site-packages (from requests==2.22.0-&gt;deeppavlov) (3.0.4)
+Requirement already satisfied: idna&lt;2.9,&gt;=2.5 in c:\anaconda\lib\site-packages (from requests==2.22.0-&gt;deeppavlov) (2.8)
+Requirement already satisfied: joblib in c:\anaconda\lib\site-packages (from sacremoses==0.0.35-&gt;deeppavlov) (0.13.2)
+Requirement already satisfied: websockets==8.* in c:\anaconda\lib\site-packages (from uvicorn==0.11.7-&gt;deeppavlov) (8.1)
+Requirement already satisfied: h11&lt;0.10,&gt;=0.8 in c:\anaconda\lib\site-packages (from uvicorn==0.11.7-&gt;deeppavlov) (0.9.0)
+Requirement already satisfied: pamqp==2.3.0 in c:\anaconda\lib\site-packages (from aiormq&lt;4,&gt;=3.2.0-&gt;aio-pika==6.4.1-&gt;deeppavlov) (2.3.0)
+Requirement already satisfied: cffi&gt;=1.12 in c:\anaconda\lib\site-packages (from cryptography&gt;=2.8-&gt;pyopenssl==19.1.0-&gt;deeppavlov) (1.15.0)
+Requirement already satisfied: multidict&gt;=4.0 in c:\anaconda\lib\site-packages (from yarl-&gt;aio-pika==6.4.1-&gt;deeppavlov) (5.2.0)
+Requirement already satisfied: typing-extensions&gt;=3.7.4 in c:\anaconda\lib\site-packages (from yarl-&gt;aio-pika==6.4.1-&gt;deeppavlov) (3.10.0.0)
+Requirement already satisfied: pycparser in c:\anaconda\lib\site-packages (from cffi&gt;=1.12-&gt;cryptography&gt;=2.8-&gt;pyopenssl==19.1.0-&gt;deeppavlov) (2.19)
+Installing collected packages: ruamel.yaml
+</pre></div></div>
+</div>
+<div class="section" id="Use-the-pre-trained-model-for-prediction">
+<h3>Use the pre-trained model for prediction<a class="headerlink" href="#Use-the-pre-trained-model-for-prediction" title="Permalink to this headline">¶</a></h3>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># TODO: add output</span>
+</pre></div>
+</div>
+</div>
+<p>Before using the model make sure that all required packages are installed using the command:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span>python -m deeppavlov install ner_ontonotes_bert_torch
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+C:\anaconda\python.exe: No module named deeppavlov
+</pre></div></div>
+</div>
+<p>Build the model using its <em>config_file</em> name (in this case - <em>ner_ontonotes_bert_torch</em>).</p>
+<p>What is a config file? # link to the tutorial</p>
+<p>You can change the NER model you are using by changing the name of the <em>config_file</em>. The full list of NER models with their config names can be found <strong>here</strong>.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">deeppavlov</span> <span class="k">import</span> <span class="n">configs</span><span class="p">,</span> <span class="n">build_model</span>
+
+<span class="n">ner_model</span> <span class="o">=</span> <span class="n">build_model</span><span class="p">(</span><span class="n">configs</span><span class="o">.</span><span class="n">ner</span><span class="o">.</span><span class="n">ner_ontonotes_bert_torch</span><span class="p">,</span> <span class="n">download</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>Predict</p>
+<p># TODO: <strong>input_format</strong>: List[str] <strong>output_format</strong>: List[List[str]]</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ner_model</span><span class="p">([</span><span class="s1">&#39;Bob Ross lived in Florida&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="Train-the-model-on-your-data">
+<h3>Train the model on your data<a class="headerlink" href="#Train-the-model-on-your-data" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="Provide-your-data-path">
+<h4>Provide your data path<a class="headerlink" href="#Provide-your-data-path" title="Permalink to this headline">¶</a></h4>
+<p>To train the model on your data, you need to change the path to the training data in the <em>config_file</em>.</p>
+<p>?You can do that manually by editing the config json-file.? Alternatively, you can parse the <em>config_file</em> and change the path to your data from Python.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">deeppavlov</span> <span class="k">import</span> <span class="n">configs</span><span class="p">,</span> <span class="n">train_model</span>
+<span class="kn">from</span> <span class="nn">deeppavlov.core.commands.utils</span> <span class="k">import</span> <span class="n">parse_config</span>
+
+<span class="n">model_config</span> <span class="o">=</span> <span class="n">parse_config</span><span class="p">(</span><span class="n">configs</span><span class="o">.</span><span class="n">ner</span><span class="o">.</span><span class="n">ner_ontonotes_bert_torch</span><span class="p">)</span>
+
+<span class="c1">#  dataset that the model was trained on</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">model_config</span><span class="p">[</span><span class="s1">&#39;dataset_reader&#39;</span><span class="p">][</span><span class="s1">&#39;data_path&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<p>You can provide a <em>data_path</em> to your dataset…</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model_config</span><span class="p">[</span><span class="s2">&quot;dataset_reader&quot;</span><span class="p">][</span><span class="s2">&quot;data_path&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;/content/faq.csv&quot;</span>
+<span class="n">model_config</span><span class="p">[</span><span class="s2">&quot;dataset_reader&quot;</span><span class="p">][</span><span class="s2">&quot;data_url&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+</pre></div>
+</div>
+</div>
+<p>…or give a link to your data in the <em>data_url</em> parameter.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model_config</span><span class="p">[</span><span class="s2">&quot;dataset_reader&quot;</span><span class="p">][</span><span class="s2">&quot;data_path&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+<span class="n">model_config</span><span class="p">[</span><span class="s2">&quot;dataset_reader&quot;</span><span class="p">][</span><span class="s2">&quot;data_url&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;http://files.deeppavlov.ai/faq/school/faq_school_en.csv&quot;</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="Training-dataset-format">
+<h4>Training dataset format<a class="headerlink" href="#Training-dataset-format" title="Permalink to this headline">¶</a></h4>
+<p>To train the neural network, you need to have a dataset in the following format:</p>
+EU B-ORG
+rejects O
+the O
+call O
+of O
+Germany B-LOC
+to O
+boycott O
+lamb O
+from O
+Great B-LOC
+Britain I-LOC
+. O
+
+China B-LOC
+says O
+time O
+right O
+for O
+Taiwan B-LOC
+talks O
+. O<p>The source text is <strong>tokenized</strong> and <strong>tagged</strong>. For each token, there is a tag with BIO markup. Tags are separated from tokens with <strong>whitespaces</strong>. Sentences are separated with <strong>empty lines</strong>.</p>
+<p>??? - Dataset is a text file or a set of text files. The dataset must be split into three parts: train, test, and validation.</p>
+</div>
+<div class="section" id="Train-the-model">
+<h4>Train the model<a class="headerlink" href="#Train-the-model" title="Permalink to this headline">¶</a></h4>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ner_model</span> <span class="o">=</span> <span class="n">train_model</span><span class="p">(</span><span class="n">model_config</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="Using-the-model-from-the-command-line">
+<h2>Using the model from the command line<a class="headerlink" href="#Using-the-model-from-the-command-line" title="Permalink to this headline">¶</a></h2>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">new_dp_docs</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2022, AC.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.1.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/notebooks/test.ipynb.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

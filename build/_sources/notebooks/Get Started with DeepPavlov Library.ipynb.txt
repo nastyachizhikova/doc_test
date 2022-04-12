@@ -1,0 +1,67 @@
+{
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "id": "f2df4dc7",
+   "metadata": {},
+   "source": [
+    "#### Get started with DeepPavlov Library"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "a41385bd",
+   "metadata": {},
+   "source": [
+    "## Installation"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "78796c90",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "!pip install deeppavlov"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "3d4138fa",
+   "metadata": {},
+   "source": [
+    "To be continued"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "4ec24997",
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python (doc_env)",
+   "language": "python",
+   "name": "doc_env"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.7.3"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 5
+}
