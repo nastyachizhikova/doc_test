@@ -20,7 +20,7 @@ copyright = 'Copyright 2018'
 author = 'Neural Networks and Deep Learning lab, MIPT.'
 
 # The short X.Y version
-version = deeppavlov.__version__
+version = 0.0.0
 # The full version, including alpha/beta/rc tags
 release = version
 
