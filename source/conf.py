@@ -12,14 +12,12 @@
 #
 import sphinx_rtd_theme
 
-import deeppavlov
-
 
 # -- Project information -----------------------------------------------------
 
 project = 'DeepPavlov'
-copyright = '2018, ' + deeppavlov.__author__
-author = deeppavlov.__author__
+copyright = 'Copyright 2018'
+author = 'Neural Networks and Deep Learning lab, MIPT.'
 
 # The short X.Y version
 version = deeppavlov.__version__
