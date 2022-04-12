@@ -20,7 +20,7 @@ copyright = 'Copyright 2018'
 author = 'Neural Networks and Deep Learning lab, MIPT.'
 
 # The short X.Y version
-version = 0.0.0
+version = 0.0
 # The full version, including alpha/beta/rc tags
 release = version
 
