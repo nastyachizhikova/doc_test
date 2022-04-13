@@ -3,3 +3,4 @@ ipykernel
 nbsphinx
 deeppavlov
 pygments
+sphinx_copybutton
