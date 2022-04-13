@@ -1,3 +1,5 @@
 ipython
 ipykernel
 nbsphinx
+deeppavlov
+pygments
