@@ -11,16 +11,18 @@
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
 import sphinx_rtd_theme
+import deeppavlov
 
 
 # -- Project information -----------------------------------------------------
 
 project = 'DeepPavlov'
-copyright = 'Copyright 2018'
-author = 'Neural Networks and Deep Learning lab, MIPT.'
+copyright = '2018, ' + deeppavlov.__author__
+author = deeppavlov.__author__
+
 
 # The short X.Y version
-version = '0.0'
+version = deeppavlov.__version__
 # The full version, including alpha/beta/rc tags
 release = version
 
@@ -32,15 +34,6 @@ release = version
 # ones.
 extensions = [
     'nbsphinx',
-    'sphinx.ext.autodoc',
-    'sphinx.ext.doctest',
-    'sphinx.ext.intersphinx',
-    'sphinx.ext.todo',
-    'sphinx.ext.coverage',
-    'sphinx.ext.napoleon',
-    'sphinx.ext.viewcode',
-    'sphinx.ext.mathjax',
-    'sphinx.ext.extlinks',
     'IPython.sphinxext.ipython_console_highlighting'
 ]
 
@@ -53,12 +46,22 @@ templates_path = ['_templates']
 # This pattern also affects html_static_path and html_extra_path.
 exclude_patterns = ['_build', '**.ipynb_checkpoints']
 
-pygments_style = 'sphinx'
-highlight_language = 'python3'
+# pygments_style = 'sphinx'
+highlight_language = 'none'
 
-html_logo = '_static/deeppavlov.png'
+html_logo = '_static/deeppavlov_logo.png'
 
+# nbsphinx_prompt_width = 0
+nbsphinx_prolog = """
+.. raw:: html
 
+    <style>
+    .nbinput .prompt,
+    .nboutput .prompt {
+        display: none;
+    }
+    </style>
+"""
 
 # -- Options for HTML output -------------------------------------------------
 
@@ -73,10 +76,10 @@ html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ['_static']
 
-html_context = {
-    'css_files': [
-        'https://media.readthedocs.org/css/sphinx_rtd_theme.css',
-        'https://media.readthedocs.org/css/readthedocs-doc-embed.css',
-        '_static/deeppavlov.css'
-    ]
-}
+# html_context = {
+#     'css_files': [
+#         'https://media.readthedocs.org/css/sphinx_rtd_theme.css',
+#         'https://media.readthedocs.org/css/readthedocs-doc-embed.css',
+#         '_static/deeppavlov.css'
+#     ]
+# }
