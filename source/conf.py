@@ -34,7 +34,8 @@ release = version
 # ones.
 extensions = [
     'nbsphinx',
-    'IPython.sphinxext.ipython_console_highlighting'
+    'IPython.sphinxext.ipython_console_highlighting',
+    'sphinx_copybutton'
 ]
 
 
@@ -48,6 +49,7 @@ exclude_patterns = ['_build', '**.ipynb_checkpoints']
 
 # pygments_style = 'sphinx'
 highlight_language = 'none'
+pygments_style = 'sphinx'
 
 html_logo = '_static/deeppavlov_logo.png'
 
@@ -76,10 +78,4 @@ html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ['_static']
 
-# html_context = {
-#     'css_files': [
-#         'https://media.readthedocs.org/css/sphinx_rtd_theme.css',
-#         'https://media.readthedocs.org/css/readthedocs-doc-embed.css',
-#         '_static/deeppavlov.css'
-#     ]
-# }
+html_css_files = ['my_blocks.css']
