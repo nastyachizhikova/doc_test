@@ -18,6 +18,7 @@ Welcome to DeepPavlov's documentation!
    :caption: Models
    
    Named Entity Recognition<notebooks/NER.ipynb>
+   Context Question Answering<notebooks/SQuAD.ipynb>
    
    
 .. toctree::
